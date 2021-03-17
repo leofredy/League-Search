@@ -17,7 +17,7 @@ const store = new Vuex.Store({
       if (localStorage.getItem("champion")) {
         context.commit("SET_CHAMPIONS", JSON.parse(localStorage.getItem("champions")));
       } else {
-        fetch("http://ddragon.leagueoflegends.com/cdn/11.5.1/data/pt_BR/champion.json")
+        fetch("https://ddragon.leagueoflegends.com/cdn/11.5.1/data/pt_BR/champion.json")
           .then(response => response.json())
           .then(data => {
             localStorage.setItem("champions", JSON.stringify(data.data));
