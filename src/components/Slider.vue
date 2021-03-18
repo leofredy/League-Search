@@ -29,7 +29,8 @@ export default {
         startY: 0,
         moviment: 0,
         movePosition: 0,
-        speed: 0.9
+        speed: 0.9,
+        hadMovement: false,
       },
       slideArray: [
         {
@@ -44,6 +45,7 @@ export default {
       },
       cards: 0,
       timer: null,
+
     }
   },
   methods: {
@@ -52,7 +54,6 @@ export default {
       let eventMove;
       event.preventDefault();
       if (event.type === "mousedown") {
-        
         this.dist.startY = event.screenY;
         eventMove = "mousemove";
       } else {
@@ -64,14 +65,19 @@ export default {
     },
     onEnd(event) {
       event.currentTarget.removeEventListener("mousemove", this.onMove);
-      this.dist.finalPosition = this.dist.movePosition;
-      this.transition(true);
-      this.changeSlidesOnEnd();
+      if (this.dist.hadMovement) {
+        this.dist.finalPosition = this.dist.movePosition;
+        this.transition(true);
+        this.changeSlidesOnEnd();
+      }
+      this.dist.hadMovement = false;
     },
     onMove(event) {
+      this.dist.hadMovement = true;
       const positionY = event.type === "mousemove" ? event.screenY : event.changedTouches[0].clientY;
       const finalPosition = this.updatePosition(positionY);
       this.moverSlide(finalPosition);
+      this.checkDisplayRange(event.screenX, event.screenY, event);
     },
     updatePosition(position) {
       this.dist.moviment = (position - this.dist.startY) * this.dist.speed;
@@ -80,6 +86,15 @@ export default {
     moverSlide(distancia) {
       this.dist.movePosition = distancia;
       this.$refs.slides.style.transform = `translate3d(0, ${distancia}px, 0)`;
+    },
+    checkDisplayRange(screenX, screenY, event) {
+      const RANGE_MAX_DISPLAY_TOP = 390;
+      const RANGE_MAX_DISPLAY_BOTTOM = 900;
+      const RANGE_MAX_DISPLAY_LEFT = 150;
+      const RANGE_MAX_DISPLAY_RIGTH = 1100;
+      if (screenY < RANGE_MAX_DISPLAY_TOP || screenY > RANGE_MAX_DISPLAY_BOTTOM || screenX < RANGE_MAX_DISPLAY_LEFT || screenX > RANGE_MAX_DISPLAY_RIGTH) {
+        this.onEnd(event);
+      }
     },
     transition(active) {
       this.$refs.slides.style.transition = active ? "transform 0.3s" : "";
