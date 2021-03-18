@@ -50,9 +50,9 @@ export default {
     onStart(event) {
       this.transition(false);
       let eventMove;
-
+      event.preventDefault();
       if (event.type === "mousedown") {
-        event.preventDefault();
+        
         this.dist.startY = event.screenY;
         eventMove = "mousemove";
       } else {
@@ -101,18 +101,24 @@ export default {
       this.dist.finalPosition = this.slideArray[index].positionElement;
     },
     slidesConfig() {
-      this.slideArray = [...this.$refs.slides.children].map(element => {
-        const positionElement = this.slidePosition(element);
-        return { positionElement, element };
-      });
+      try {
+        this.slideArray = [...this.$refs.slides.children].map(element => {
+          const positionElement = this.slidePosition(element);
+          return { positionElement, element };
+        });
+      } catch(error){
+        console.log(error);
+      }
+
     },
     slidePosition(element) {
       const divWrapper = element.parentElement.parentElement;
       const alturaWrapper = divWrapper.offsetHeight;
       const margin = (alturaWrapper - element.offsetHeight) / 2;
-      return -((element.offsetTop - divWrapper.offsetTop) - margin);
+      return -(element.offsetTop - margin);
     },
     slidesIndexNav(index) {
+      
       const last = this.$store.state.champions.length;
       this.cards = Math.trunc(this.$refs.slides.parentElement.offsetWidth / this.$refs.slides.children[0].offsetWidth);
       this.index = {
@@ -134,18 +140,13 @@ export default {
       const lastCard  = this.slidesLinePosition();
       for (let i = 0; i < this.cards; i++) {
         const card = lastCard - (i + 1);
-        try {
+        if (card <= this.$store.state.champions.length - 1) {
           this.slideArray[card].element.classList.add(this.activeClass);
-        } catch(Error) {
-          console.log(card);
         }
-
       }
     },
     activeNextSlide() {
-      if (this.index.next) {
-        this.changeSlide(this.index.next);
-      }
+      this.changeSlide(this.index.next);
     }, 
     activePrevSlide() {
       if (this.index.prev !== undefined) {
@@ -160,13 +161,13 @@ export default {
       this.timer = setTimeout(() => {
         this.slidesConfig();
         this.changeSlide(this.index.active);
-      }, 500);
+      }, 100);
     },
     init() {
-      console.log(this.$store.state.champions.length)
       this.slidesConfig();
-      this.changeSlide(6);
+      this.changeSlide(0);
       this.addResizeEvents();
+      this.onResize();
     }
   },
   mounted() {
@@ -184,6 +185,7 @@ img {
 }
 .wrapper {
   overflow: hidden;
+  flex: 1;
 }
 .slide {
     display: grid;

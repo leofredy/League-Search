@@ -14,8 +14,8 @@ const store = new Vuex.Store({
   },
   actions: {
     fetchChampions(context) {
-      if (localStorage.getItem("champion")) {
-        context.commit("SET_CHAMPIONS", JSON.parse(localStorage.getItem("champions")));
+      if (localStorage.getItem("champions")) {
+        context.commit("SET_CHAMPIONS", Object.values(JSON.parse(localStorage.getItem("champions"))));
       } else {
         fetch("https://ddragon.leagueoflegends.com/cdn/11.5.1/data/pt_BR/champion.json")
           .then(response => response.json())
