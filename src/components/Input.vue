@@ -1,24 +1,30 @@
 <template>
 
   <form v-on:submit.prevent="enviarPesquisa">
-    <div class="input-container">
-      <input 
+    <div :class="{show: pesquisa}" class="input-container">
+      <input
         v-model="pesquisa"
-        id="name" 
+        id="name"
         placeholder="Pesquise um champion...."
         autocomplete="off"
-        list="champions" 
         type="text">
       <label for="name"><img src="@/assets/svg/search.svg"></label>
+      <ul class="sugestoes">
+        <li
+          v-for="(champion, index) in sugestaoChamp"
+          :key="index"
+          @click="escolherSugestao($event)"
+          class="sugestao"
+        >
+          <img
+            :src="`https://ddragon.leagueoflegends.com/cdn/11.6.1/img/champion/${champion.id}.png`"
+            :alt="champion.name"
+            class="sugestao-square">
+          <span class="sugestao-text">{{ champion.name }}</span>
+        </li>
+      </ul>
     </div>
-    
-    <datalist v-if="$store.state.champions" id="champions">
-      <option 
-        v-for="(champion, index) in $store.state.champions" 
-        :key="index" 
-        :value="champion.name"
-        class="champion"/>
-    </datalist>
+
   </form>
 
 
@@ -32,9 +38,25 @@ export default {
       pesquisa: ""
     }
   },
+  filters: {
+
+  },
+  computed: {
+    sugestaoChamp() {
+      return this.$store.state.champions.filter(champion => {
+        if (this.pesquisa) {
+          return champion.name.toLowerCase().includes(this.pesquisa.toLowerCase());
+        }
+      });
+    }
+  },
   methods: {
     enviarPesquisa() {
       console.log(this.pesquisa);
+    },
+    escolherSugestao(event) {
+      this.pesquisa = event.currentTarget.children[1].innerText;
+      this.enviarPesquisa();
     }
   }
 }
@@ -48,6 +70,7 @@ form {
 }
 
 .input-container {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -58,16 +81,61 @@ form {
   padding: 4px 8px;
 }
 
+.show {
+  border-radius: 4px 4px 0px 0px;
+}
+
 #name {
   display: block;
   flex: 1;
   height: 100%;
-  
+
   font-size: 1.4rem;
   color: #A0A0A0;
   border: none;
   background: none;
   outline: none;
+}
+
+.sugestoes {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 300px;
+  overflow-x: auto;
+  background-color: #fff;
+  border-radius: 0px 0px 4px 4px;
+  cursor: pointer;
+  z-index: 97;
+}
+
+.sugestao {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  
+}
+
+.sugestao:hover {
+  background-color: #eeeeee;
+}
+
+.sugestao-square {
+  width: 40px;
+  margin-right: 12px;
+}
+
+.sugestao-text {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #004e76;
+}
+
+
+
+::webkit-scrollbar {
+  -webkit-border-radius: 4px;
 }
 
 @media (max-width: 1024px) {

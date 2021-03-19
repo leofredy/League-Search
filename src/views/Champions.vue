@@ -37,7 +37,7 @@ export default {
   justify-content: center;
   max-width: 1059px;
   max-height: 921px;
-  height: calc(100vh - 81px);
+  height: calc(100vh - 85px);
   padding: 0px 20px 50px 20px;
   margin: 0 auto;
 }

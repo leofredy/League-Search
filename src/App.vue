@@ -53,4 +53,12 @@ p, span {
   font-weight: 400;
 }
 
+ul {
+  list-style: none;
+}
+
+#app {
+  position: relative;
+}
+
 </style>
