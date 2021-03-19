@@ -1,24 +1,16 @@
 <template>
   <div id="app">
-    <Header/>
     <Champions/>
-
-
-    <Video/>
   </div>
 </template>
 
 <script>
 
-import Video from "@/components/Video.vue";
-import Header from "@/components/Header.vue";
 import Champions from "@/views/Champions.vue";
 
 export default {
   name: 'App',
   components: {
-    Header,
-    Video,
     Champions
   }
 }
@@ -55,10 +47,6 @@ p, span {
 
 ul {
   list-style: none;
-}
-
-#app {
-  position: relative;
 }
 
 </style>
