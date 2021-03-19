@@ -2,7 +2,10 @@
   <section class="champions">
     <Input/>
     <h1>Champions</h1>
-    <Slider v-if="$store.state.champions"/>
+    <transition>
+      <Slider v-if="$store.state.champions"/>
+      <LoadingCards v-else/>
+    </transition>
   </section>
 </template>
 
@@ -11,13 +14,15 @@
 
 import Input from "@/components/Input.vue";
 import Slider from "@/components/Slider.vue";
+import LoadingCards from "@/components/LoadingCards.vue";
 
 
 export default {
   name: "Champions",
   components: {
     Input,
-    Slider
+    Slider,
+    LoadingCards
   },
   created() {
     this.$store.dispatch("fetchChampions");

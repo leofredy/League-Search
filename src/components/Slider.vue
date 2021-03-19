@@ -1,7 +1,6 @@
 <template>
   
   <div 
-    
     @mousedown="onStart($event)" 
     @touchstart="onStart($event)" 
     @mouseup="onEnd($event)"
