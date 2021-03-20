@@ -11,7 +11,7 @@
       <label for="name"><img src="@/assets/svg/search.svg"></label>
       <ul class="sugestoes">
         <li
-          v-for="(champion, index) in sugestaoChamp"
+          v-for="(champion, index) in sugestoes"
           :key="index"
           @click="escolherSugestao($event)"
           class="sugestao"
@@ -35,19 +35,16 @@ export default {
   name: "Input",
   data() {
     return {
-      pesquisa: ""
+      pesquisa: "",
+      sugestoes: []
     }
   },
   filters: {
 
   },
-  computed: {
-    sugestaoChamp() {
-      return this.$store.state.champions.filter(champion => {
-        if (this.pesquisa) {
-          return champion.name.toLowerCase().includes(this.pesquisa.toLowerCase());
-        }
-      });
+  watch: {
+    pesquisa() {
+      this.sugestaoChamp();
     }
   },
   methods: {
@@ -57,6 +54,13 @@ export default {
     escolherSugestao(event) {
       this.pesquisa = event.currentTarget.children[1].innerText;
       this.enviarPesquisa();
+    },
+    sugestaoChamp() {
+      this.sugestoes = this.$store.state.champions.filter(champion => {
+        if (this.pesquisa) {
+          return champion.name.toLowerCase().includes(this.pesquisa.toLowerCase());
+        }
+      });
     }
   }
 }
