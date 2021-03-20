@@ -4,6 +4,7 @@
     <div :class="{show: pesquisa}" class="input-container">
       <input
         v-model="pesquisa"
+        @keyup="sugestaoChamp"
         id="name"
         placeholder="Pesquise um champion...."
         autocomplete="off"
@@ -37,14 +38,6 @@ export default {
     return {
       pesquisa: "",
       sugestoes: []
-    }
-  },
-  filters: {
-
-  },
-  watch: {
-    pesquisa() {
-      this.sugestaoChamp();
     }
   },
   methods: {
