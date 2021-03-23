@@ -149,12 +149,15 @@ export default {
       return lastCard;
     },
     changeActiveClass() {
+      console.log("inicio da funcao")
       this.slideArray.forEach(card => {
         card.element.classList.remove(this.activeClass);
+        console.log("limpando classes")
       });
 
       const lastCard  = this.slidesLinePosition();
       for (let i = 0; i < this.cards; i++) {
+        console.log("percorrendo cada elemento")
         const card = lastCard - (i + 1);
         if (card <= this.$store.state.champions.length - 1) {
           this.slideArray[card].element.classList.add(this.activeClass);
