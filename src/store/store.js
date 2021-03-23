@@ -42,7 +42,7 @@ const store = new Vuex.Store({
         context.commit("SET_CHAMPION", champion);
       } 
       else {
-        fetch(`http://ddragon.leagueoflegends.com/cdn/11.6.1/data/pt_BR/champion/${payload}.json`)
+        fetch(`https://ddragon.leagueoflegends.com/cdn/11.6.1/data/pt_BR/champion/${payload}.json`)
         .then(response => response.json())
         .then(data => {
           context.commit("SET_CHAMPION", Object.values(data.data));
