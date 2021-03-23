@@ -7,10 +7,12 @@
     @touchend="onEnd($event)"
     class="wrapper">
 
-    <ul ref="slides" class="slide my-slider">
+    <ul ref="slides" class="slide">
       <li v-for="(champion, index) in $store.state.champions" :key="index">
-        <img :src="`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${champion.id}_0.jpg`" :alt="champion.name">
-        <p class="name-champion">{{champion.name}}</p>
+        <router-link :to="`/champions/${champion.id}`">
+          <img :src="`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${champion.id}_0.jpg`" :alt="champion.name">
+          <p class="name-champion">{{champion.name}}</p>
+        </router-link>
       </li>
     </ul>
     

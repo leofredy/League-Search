@@ -1,17 +1,21 @@
 <template>
   <div id="app">
-    <Champions/>
+    <Header/>
+    <router-view></router-view>
+    <Video/>
   </div>
 </template>
 
 <script>
 
-import Champions from "@/views/Champions.vue";
+import Header from "@/components/Header.vue";
+import Video from "@/components/Video.vue";
 
 export default {
   name: 'App',
   components: {
-    Champions
+    Header,
+    Video,
   }
 }
 </script>
@@ -47,6 +51,19 @@ p, span {
 
 ul {
   list-style: none;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transform: translate3d(-80px, 0px, 0);
+  opacity: 0;
+  transition: all 0.7s ease;
+}
+
+.v-enter-to, 
+.v-leave {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
 }
 
 </style>

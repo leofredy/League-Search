@@ -14,14 +14,14 @@
         <li
           v-for="(champion, index) in sugestoes"
           :key="index"
-          @click="escolherSugestao($event)"
-          class="sugestao"
         >
-          <img
-            :src="`https://ddragon.leagueoflegends.com/cdn/11.6.1/img/champion/${champion.id}.png`"
-            :alt="champion.name"
-            class="sugestao-square">
-          <span class="sugestao-text">{{ champion.name }}</span>
+          <router-link :to="`/champions/${champion.id}`" class="sugestao">
+            <img
+              :src="`https://ddragon.leagueoflegends.com/cdn/11.6.1/img/champion/${champion.id}.png`"
+              :alt="champion.name"
+              class="sugestao-square">
+            <span class="sugestao-text">{{ champion.name }}</span>
+          </router-link>
         </li>
       </ul>
     </div>
@@ -42,11 +42,10 @@ export default {
   },
   methods: {
     enviarPesquisa() {
-      console.log(this.pesquisa);
-    },
-    escolherSugestao(event) {
-      this.pesquisa = event.currentTarget.children[1].innerText;
-      this.enviarPesquisa();
+      this.$router.push({
+        name: "Champion",
+        params: {id: this.sugestoes[0].id}
+      });
     },
     sugestaoChamp() {
       this.sugestoes = this.$store.state.champions.filter(champion => {
@@ -76,6 +75,17 @@ form {
   background-color: #fff;
   border-radius: 4px;
   padding: 4px 8px;
+  z-index: 98;
+  transition: transform 0.4s ease;
+}
+
+.input-container:hover {
+  transform: scale(1.05);
+}
+
+
+.input-container:hover > .sugestoes  {
+  transform: scale(1.001);
 }
 
 .show {
@@ -96,7 +106,7 @@ form {
 
 .sugestoes {
   position: absolute;
-  top: 100%;
+  top: 95%;
   left: 0;
   right: 0;
   max-height: 300px;
@@ -105,13 +115,16 @@ form {
   border-radius: 0px 0px 4px 4px;
   cursor: pointer;
   z-index: 97;
+  transform: scale(1);
+
+  transition: transform 0.4s ease;
 }
 
 .sugestao {
   display: flex;
   align-items: center;
   padding: 8px 16px;
-  
+  text-decoration: none;
 }
 
 .sugestao:hover {

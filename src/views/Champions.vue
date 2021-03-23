@@ -1,24 +1,18 @@
 <template>
-  <div class="page-champion">
+  <transition appear name="home-fade" mode="out-in">
 
-    <Header/>
     <section class="champions">
       <Input/>
       <h1>Champions</h1>
-      <transition>
-        <Slider v-if="$store.state.champions"/>
-        <LoadingCards v-else/>
-      </transition>
+        <Slider v-if="$store.state.champions" key="slide"/>
+        <LoadingCards v-else key="loading"/>
     </section>
-    <Video/>
 
-  </div>
+  </transition>
 </template>
 
 <script>
 
-import Header from "@/components/Header.vue";
-import Video from "@/components/Video.vue";
 import Input from "@/components/Input.vue";
 import Slider from "@/components/Slider.vue";
 import LoadingCards from "@/components/LoadingCards.vue";
@@ -27,11 +21,19 @@ import LoadingCards from "@/components/LoadingCards.vue";
 export default {
   name: "Champions",
   components: {
-    Header,
-    Video,
     Input,
     Slider,
     LoadingCards
+  },
+  data() {
+    return {
+      teste: false
+    }
+  },
+  methods: {
+    enter() {
+
+    }
   },
   created() {
     this.$store.dispatch("fetchChampions");
@@ -40,16 +42,12 @@ export default {
 </script>
 
 <style scoped>
-.page-champion {
-  position: relative;
-  overflow: hidden;
-}
+
 .champions {
   display: flex;
   flex-direction: column;
   justify-content: center;
   max-width: 1059px;
-  max-height: 921px;
   height: calc(100vh - 85px);
   padding: 0px 20px 50px 20px;
   margin: 0 auto;
@@ -69,5 +67,17 @@ h1 {
   }
 }
 
+.home-fade-enter-active,
+.home-fade-leave-active {
+  transform: translate3d(80px, 0px, 0);
+  opacity: 0;
+  transition: all 0.7s ease;
+}
+
+.home-fade-enter-to, 
+.home-fade-leave {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
 
 </style>
