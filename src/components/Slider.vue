@@ -10,7 +10,7 @@
     <ul ref="slides" class="slide">
       <li v-for="(champion, index) in $store.state.champions" :key="index">
         <router-link :to="`/champions/${champion.id}`">
-          <img :src="`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${champion.id}_0.jpg`" :alt="champion.name">
+          <img :src="`https://ddragon.leagueoflegends.com/cdn/img/champion/loading/${champion.id}_0.jpg`" :alt="champion.name">
           <p class="name-champion">{{champion.name}}</p>
         </router-link>
       </li>
