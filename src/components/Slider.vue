@@ -2,9 +2,10 @@
   
   <div 
     @mousedown="onStart($event)" 
-    @touchstart.passive="onStart($event)" 
+    @touchstart.passive="onStart($event)"
     @mouseup="onEnd($event)"
     @touchend="onEnd($event)"
+    @wheel="onMoveWheel($event)" 
     class="wrapper">
 
     <ul  ref="slides" class="slide">
@@ -54,7 +55,7 @@ export default {
       this.transition(false);
       let eventMove;
       event.preventDefault();
-      if (event.type === "mousedown") {
+      if (event.type === "mousedown" || event.type === "wheel") {
         this.dist.startY = event.screenY;
         eventMove = "mousemove";
       } else {
@@ -63,6 +64,7 @@ export default {
       }
 
       event.currentTarget.addEventListener(eventMove, this.onMove);
+      
     },
     onEnd(event) {
       event.currentTarget.removeEventListener("mousemove", this.onMove);
@@ -168,7 +170,15 @@ export default {
       if (this.index.prev !== undefined) {
         this.changeSlide(this.index.prev);
       }
-    }, 
+    },
+    onMoveWheel(event) {
+      const ENLARGE_SCROLL = 1.4;
+      const DIRECTION_SCROLL_MOVE = -1
+      const movimentScroll = event.deltaY * ENLARGE_SCROLL * DIRECTION_SCROLL_MOVE;
+
+      this.dist.moviment = movimentScroll;
+      this.changeSlidesOnEnd();
+    },
     addResizeEvents() {
       window.addEventListener("resize", this.onResize);
     },
