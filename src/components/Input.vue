@@ -4,13 +4,12 @@
     <div :class="{show: pesquisa}" class="input-container">
       <input
         v-model="pesquisa"
-        @keyup="sugestaoChamp"
         id="name"
         placeholder="Pesquise um champion...."
         autocomplete="off"
         type="text">
-      <label for="name"><img src="@/assets/svg/search.svg"></label>
-      <ul class="sugestoes">
+      <label @click="enviarPesquisa" for="name"><img src="@/assets/svg/search.svg"></label>
+      <ul v-if="sugestoes.length > 0" class="sugestoes">
         <li
           v-for="(champion, index) in sugestoes"
           :key="index"
@@ -40,20 +39,24 @@ export default {
       sugestoes: []
     }
   },
-  methods: {
-    enviarPesquisa() {
-      this.$router.push({
-        name: "Champion",
-        params: {id: this.sugestoes[0].id}
-      });
-    },
-    sugestaoChamp() {
+  watch: {
+    pesquisa() {
       this.sugestoes = this.$store.state.champions.filter(champion => {
         if (this.pesquisa) {
           return champion.name.toLowerCase().includes(this.pesquisa.toLowerCase());
         }
       });
     }
+  },
+  methods: {
+    enviarPesquisa() {
+      if (this.sugestoes.length > 0) {
+        this.$router.push({
+          name: "Champion",
+          params: {id: this.sugestoes[0].id}
+        });
+      }
+    },
   }
 }
 </script>

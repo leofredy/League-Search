@@ -2,14 +2,14 @@
   
   <div 
     @mousedown="onStart($event)" 
-    @touchstart="onStart($event)" 
+    @touchstart.passive="onStart($event)" 
     @mouseup="onEnd($event)"
     @touchend="onEnd($event)"
     class="wrapper">
 
-    <ul ref="slides" class="slide">
+    <ul  ref="slides" class="slide">
       <li v-for="(champion, index) in $store.state.champions" :key="index">
-        <router-link :to="`/champions/${champion.id}`">
+        <router-link   :to="`/champions/${champion.id}`" class="slide-link">
           <img :src="`https://ddragon.leagueoflegends.com/cdn/img/champion/loading/${champion.id}_0.jpg`" :alt="champion.name">
           <p class="name-champion">{{champion.name}}</p>
         </router-link>
@@ -149,15 +149,12 @@ export default {
       return lastCard;
     },
     changeActiveClass() {
-      console.log("inicio da funcao")
       this.slideArray.forEach(card => {
         card.element.classList.remove(this.activeClass);
-        console.log("limpando classes")
       });
 
       const lastCard  = this.slidesLinePosition();
       for (let i = 0; i < this.cards; i++) {
-        console.log("percorrendo cada elemento")
         const card = lastCard - (i + 1);
         if (card <= this.$store.state.champions.length - 1) {
           this.slideArray[card].element.classList.add(this.activeClass);
@@ -187,6 +184,9 @@ export default {
       this.changeSlide(0);
       this.addResizeEvents();
       this.onResize();
+    },
+    executarRouterLinkMobile(event) {
+      console.log(event.currentTarget);
     }
   },
   mounted() {
