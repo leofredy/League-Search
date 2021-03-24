@@ -88,7 +88,10 @@ export default {
     },
     moverSlide(distancia) {
       this.dist.movePosition = distancia;
-      this.$refs.slides.style.transform = `translate3d(0, ${distancia}px, 0)`;
+
+      if (this.$refs.slides) {
+        this.$refs.slides.style.transform = `translate3d(0, ${distancia}px, 0)`;
+      }
     },
     checkDisplayRange(screenX, screenY, event) {
       const RANGE_MAX_DISPLAY_TOP = 390;
@@ -173,10 +176,10 @@ export default {
     },
     onMoveWheel(event) {
       const ENLARGE_SCROLL = 1.4;
-      const DIRECTION_SCROLL_MOVE = -1
-      const movimentScroll = event.deltaY * ENLARGE_SCROLL * DIRECTION_SCROLL_MOVE;
+      const DIRECTION_SCROLL_MOVE = -1;
+      const MOVIMENT_SCROLL = event.deltaY * ENLARGE_SCROLL * DIRECTION_SCROLL_MOVE;
 
-      this.dist.moviment = movimentScroll;
+      this.dist.moviment = MOVIMENT_SCROLL;
       this.changeSlidesOnEnd();
     },
     addResizeEvents() {
@@ -184,10 +187,12 @@ export default {
     },
     onResize() {
       clearTimeout(this.timer);
-      this.timer = setTimeout(() => {
-        this.slidesConfig();
-        this.changeSlide(this.index.active);
-      }, 100);
+      if (this.$refs.slides) {
+        this.timer = setTimeout(() => {
+          this.slidesConfig();
+          this.changeSlide(this.index.active);
+        }, 100);
+      }
     },
     init() {
       this.slidesConfig();
@@ -195,14 +200,13 @@ export default {
       this.addResizeEvents();
       this.onResize();
     },
-    executarRouterLinkMobile(event) {
-      console.log(event.currentTarget);
-    }
   },
   mounted() {
     this.init();
   },
-
+  destroyed() {
+    window.removeEventListener("resize", this.onResize);
+  }
 }
 </script>
 
