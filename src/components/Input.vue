@@ -4,6 +4,7 @@
     <div :class="{show: pesquisa}" class="input-container">
       <input
         v-model="pesquisa"
+        v-on:input="carregarSugestoes"
         id="name"
         placeholder="Pesquise um champion...."
         autocomplete="off"
@@ -40,13 +41,6 @@ export default {
     }
   },
   watch: {
-    pesquisa() {
-      this.sugestoes = this.$store.state.champions.filter(champion => {
-        if (this.pesquisa) {
-          return champion.name.toLowerCase().includes(this.pesquisa.toLowerCase());
-        }
-      });
-    }
   },
   methods: {
     enviarPesquisa() {
@@ -57,6 +51,13 @@ export default {
         });
       }
     },
+    carregarSugestoes() {
+      this.sugestoes = this.$store.state.champions.filter(champion => {
+        if (this.pesquisa) {
+          return champion.name.toLowerCase().includes(this.pesquisa.toLowerCase());
+        }
+      });
+    }
   }
 }
 </script>
